@@ -1,57 +1,62 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
-void pedirNombre (char*);
-void pedirApellido (char*);
-void mostrarApellidoYNombre (char*, char*);
-void primeraLetraMayus (char*, char*);
+void pedirString (char*);
+void primeraLetraMayus (char*, char*, char*);
 
 int main()
 {
     char nombre[20];
     char apellido[20];
+    char apellidoYNombre[41]="";
 
-    pedirNombre(nombre);
-    pedirApellido(apellido);
-    primeraLetraMayus(nombre, apellido);
-   // mostrarApellidoYNombre(nombre, apellido);
+    printf("Ingrese nombre: ");
+    pedirString(nombre);
+
+    printf("Ingrese apellido: ");
+    pedirString(apellido);
+
+    primeraLetraMayus(nombre, apellido, apellidoYNombre);
     return 0;
 }
 
-void pedirNombre(char* nombre)
+void pedirString(char* dato)
 {
-    printf("Ingrese su nombre: ");
-    gets(nombre);
+    char buffer[1024];
+
     fflush(stdin);
+    gets(dato);
+    strcpy(buffer, dato);
+
+    while (strlen(buffer)>19)
+    {
+        printf("Reingrese dato: ");
+        fflush(stdin);
+        gets(dato);
+        strcpy(buffer, dato);
+    }
+    strcpy(dato, buffer);
 }
 
-void pedirApellido(char* apellido)
+void primeraLetraMayus(char* nombre, char* apellido, char* apellidoYNombre)
 {
-    printf("Ingrese su apellido: ");
-    gets(apellido);
-    fflush(stdin);
-}
-
-void primeraLetraMayus(char* nombre, char* apellido)
-{
-    strupr(nombre);
-    strupr(apellido);
-    /*strlwr(nombre);
-    strupr(nombre[0]);
-    strlwr(apellido);
-    strupr(apellido[0]);
-*/
-    printf("%s\n%s", nombre, apellido);
-
-}
-void mostrarApellidoYNombre(char* nombre, char* apellido)
-{
-    char apellidoYNombre[42]="";
+    int i;
     strcat(apellidoYNombre, apellido);
     strcat(apellidoYNombre, ", ");
     strcat(apellidoYNombre, nombre);
 
-    printf(apellidoYNombre);
+    strlwr(apellidoYNombre);
+    apellidoYNombre[0]=toupper(apellidoYNombre[0]);
 
+    for(i=0; i<strlen(apellidoYNombre); i++)
+    {
+        if(apellidoYNombre[i] == ' ')
+        {
+            apellidoYNombre[i+1]=toupper(apellidoYNombre[i+1]);
+        }
+    }
+    printf("%s", apellidoYNombre);
 }
+
